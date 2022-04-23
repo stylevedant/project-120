@@ -1,0 +1,171 @@
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <title>Sketch Classification</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/p5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.9.0/addons/p5.dom.min.js"></script>
+
+  <script src="https://unpkg.com/ml5@latest/dist/ml5.min.js" type="text/javascript"></script>
+  
+  
+    
+  <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+
+<body>
+    <center>
+        <p> CASE STUDY GOOGLE LENS VS MOBILENET </p>
+        <span class="google_lens">GOOGLE LENS <img src="data:image/png;base64,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"> </span>
+        <p>vs</p>
+        <p class=" mobile net btn btn-primary"> MOBILE NET</p>
+        <ol>
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="bottle.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="spone.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="Guitar.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="shoes.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="banana.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="car.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+
+            <div class="test_image_and_result col-xs-12"></div>
+            <li class="col-sm-4 col-xs-12">
+                <b class="whitei">Test Image - </b>
+                <img class="img" src="bell.jpg">
+            </li>
+            <h5 class="first col-sm-4-col-xs">
+                output on <b> GOOGLE LENS</b>
+                <span></span>
+            </h5>
+            <h5 class="secound col-sm-4-col-sx">
+                output on <b> MOBILENET</b>
+                <span></span> 
+            </h5>
+            <div class="mini_result" class="col-xs-12">
+                <h4>Result</h4>
+                <hr>
+                <h4></h4>
+                </div>
+            </div>
+        </ol>
+        <p class="botton">Devoloped by whitehat jr team </p>
+
+    </center>
+</body>
